@@ -1,0 +1,28 @@
+# Docker Compose for SignalWire + OpenAI Voice Assistant Showcase
+
+services:
+  signalwire-assistant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: signalwire-voice-assistant
+    ports:
+      - "${PORT:-5050}:${PORT:-5050}"
+    environment:
+      - PORT=${PORT:-5050}
+      - AUDIO_FORMAT=pcm16
+    secrets:
+      - openai_api_key
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5050/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+secrets:
+  openai_api_key:
+    file: ./secrets/openai_api_key.txt
+

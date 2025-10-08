@@ -1,0 +1,32 @@
+{
+  "name": "signalwire-openai-voice-assistant",
+  "version": "1.0.0",
+  "description": "SignalWire + OpenAI Realtime Voice Assistant Demo",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "nodemon --exec \"npm run build && npm start\" --watch src --ext ts,json",
+    "dev:watch": "tsc --watch",
+    "clean": "rm -rf dist logs",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["signalwire", "openai", "realtime", "voice", "assistant", "telephony", "ai"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "nodemon": "^3.1.10",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@fastify/formbody": "^7.4.0",
+    "@fastify/websocket": "^10.0.1",
+    "@openai/agents": "^0.1.4",
+    "@openai/agents-realtime": "^0.1.4",
+    "dotenv": "^17.2.2",
+    "fastify": "^4.28.1",
+    "zod": "^3.23.8"
+  }
+}
