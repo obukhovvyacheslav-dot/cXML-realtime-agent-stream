@@ -1,7 +1,7 @@
 /**
  * Real-time Audio Streaming Route
  *
- * This WebSocket endpoint uses SignalWireRealtimeTransportLayer to bridge
+ * This WebSocket endpoint uses SignalWireCompatibilityTransportLayer to bridge
  * SignalWire WebSocket connections with OpenAI's Realtime API.
  */
 
@@ -14,7 +14,7 @@ import {
   type RealtimeClientMessage,
   type TransportEvent
 } from '@openai/agents/realtime';
-import { SignalWireRealtimeTransportLayer } from '../transports/SignalWireRealtimeTransportLayer.js';
+import { SignalWireCompatibilityTransportLayer } from '../transports/SignalWireCompatibilityTransportLayer.js';
 import { logger } from '../utils/logger.js';
 import { CONNECTION_MESSAGES, ERROR_MESSAGES, EVENT_TYPES } from '../constants.js';
 import type { StreamingOptions } from '../types/index.js';
@@ -43,7 +43,7 @@ export async function streamingRoute(
 
     try {
       // Create SignalWire transport layer with configured audio format
-      const signalWireTransportLayer = new SignalWireRealtimeTransportLayer({
+      const signalWireTransportLayer = new SignalWireCompatibilityTransportLayer({
         signalWireWebSocket: connection,
         audioFormat: AGENT_CONFIG.audioFormat
       });

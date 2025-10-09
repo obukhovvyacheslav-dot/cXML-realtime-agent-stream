@@ -9,7 +9,7 @@ import {
 /**
  * The options for the SignalWire Realtime Transport Layer.
  */
-export type SignalWireRealtimeTransportLayerOptions =
+export type SignalWireCompatibilityTransportLayerOptions =
   Omit<TwilioRealtimeTransportLayerOptions, 'twilioWebSocket'> & {
     /**
      * The websocket that is receiving messages from SignalWire's Media Streams API. Typically the
@@ -43,7 +43,7 @@ export type SignalWireRealtimeTransportLayerOptions =
  *
  * @example
  * ```ts
- * const transport = new SignalWireRealtimeTransportLayerV2({
+ * const transport = new SignalWireCompatibilityTransportLayer({
  *   signalWireWebSocket: signalWireWebSocket,
  *   audioFormat: 'pcm16', // Optional: defaults to 'g711_ulaw'
  * });
@@ -55,11 +55,11 @@ export type SignalWireRealtimeTransportLayerOptions =
  * });
  * ```
  */
-export class SignalWireRealtimeTransportLayer extends TwilioRealtimeTransportLayer {
+export class SignalWireCompatibilityTransportLayer extends TwilioRealtimeTransportLayer {
   #audioFormat: 'pcm16' | 'g711_ulaw';
   #logger = getLogger('openai-agents:extensions:signalwire');
 
-  constructor(options: SignalWireRealtimeTransportLayerOptions) {
+  constructor(options: SignalWireCompatibilityTransportLayerOptions) {
     // Map signalWireWebSocket to twilioWebSocket for parent class
     super({
       ...options,
