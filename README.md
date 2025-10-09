@@ -25,6 +25,25 @@ This project connects SignalWire's telephony platform with OpenAI's GPT-4 Realti
 
 This application creates a **bidirectional audio streaming bridge** between phone calls and OpenAI's Realtime API. The result is an AI assistant that can:
 
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+  - [1. Setup SignalWire](#1-setup-signalwire)
+  - [2. Clone & Configure](#2-clone--configure)
+  - [3. Test with ngrok](#3-test-with-ngrok)
+- [How It Works](#how-it-works)
+- [Configuration](#configuration)
+- [Production Deployment](#production-deployment)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
+- [Project Structure](#project-structure)
+
+## Introduction
+
+This application creates a **bidirectional audio streaming bridge** between phone calls and OpenAI's Realtime API. The result is an AI assistant that can:
+
 - Have natural, flowing conversations with **zero buffering delays**
 - Answer questions and provide information in real-time
 - Check the weather for any US city
@@ -110,6 +129,7 @@ To test your AI assistant, create a SIP address that connects to your cXML resou
 5. Save the configuration
 
 > **📖 Learn More:** [SignalWire Call Fabric Addresses Guide](https://developer.signalwire.com/platform/call-fabric/addresses)
+> **📖 Learn More:** [SignalWire Call Fabric Addresses Guide](https://developer.signalwire.com/platform/call-fabric/addresses)
 
 > **💡 Tip:** You can also purchase a regular [phone number](https://developer.signalwire.com/platform/dashboard/get-started/phone-numbers) and link it to your cXML resource if you prefer traditional phone number calling.
 
@@ -135,6 +155,7 @@ cd cXML-realtime-agent-stream
 npm install
 ```
 
+#### Add Your API Key
 #### Add Your API Key
 
 Choose **ONE** method based on how you'll run the app:
