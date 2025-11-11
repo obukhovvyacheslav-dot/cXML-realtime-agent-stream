@@ -4,26 +4,7 @@
 
 [![Run on Replit](https://replit.com/badge/github/signalwire/cXML-realtime-agent-stream)](https://replit.com/import/github)
 
-This project connects SignalWire's telephony platform with OpenAI's GPT-4 Realtime API to create voice assistants that can answer phone calls, have natural conversations, and help callers with real information—all in real-time.
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-  - [1. Setup SignalWire](#1-setup-signalwire)
-  - [2. Clone & Configure](#2-clone--configure)
-  - [3. Test with ngrok](#3-test-with-ngrok)
-- [How It Works](#how-it-works)
-- [Configuration](#configuration)
-- [Production Deployment](#production-deployment)
-- [Development](#development)
-- [Troubleshooting](#troubleshooting)
-- [Project Structure](#project-structure)
-
-## Introduction
-
-This application creates a **bidirectional audio streaming bridge** between phone calls and OpenAI's Realtime API. The result is an AI assistant that can:
+This project connects SignalWire's telephony platform with OpenAI's Realtime API to create voice assistants that can answer phone calls, have natural conversations, and help callers with real information—all in real-time.
 
 ## Table of Contents
 
