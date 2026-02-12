@@ -28,12 +28,18 @@ export async function webhookRoute(fastify: FastifyInstance) {
 
     // Generate cXML response to stream audio to our WebSocket
     const cXMLResponse = `<?xml version="1.0" encoding="UTF-8"?>
-    <Response>
-      <Say>${WEBHOOK_MESSAGES.CONNECTING}</Say>
-      <Connect>
-        <Stream url="${websocketUrl}"${codecAttribute} />
-      </Connect>
-    </Response>`;
+   <Response>
+  <Say>Connecting translator.</Say>
+
+  <Connect>
+    <Stream url="${websocketUrl}"${codecAttribute} />
+  </Connect>
+
+  <Dial>
+    <Number>+36701474688</Number>
+  </Dial>
+
+</Response>`;
 
     reply.type('text/xml').send(cXMLResponse);
   });
