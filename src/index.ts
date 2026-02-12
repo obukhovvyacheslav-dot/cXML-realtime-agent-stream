@@ -59,6 +59,7 @@ async function createServer() {
   // Register all routes
   await fastify.register(healthRoute);
   await fastify.register(webhookRoute);
+  await fastify.register(startCallRoute);
   await fastify.register(async (scopedFastify) => {
     await streamingRoute(scopedFastify, {
       agentConfig,
