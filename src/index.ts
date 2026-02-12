@@ -22,6 +22,7 @@ import { webhookRoute } from './routes/webhook.js';
 import { streamingRoute } from './routes/streaming.js';
 import { healthRoute } from './routes/health.js';
 import { logger } from './utils/logger.js';
+import { startCallRoute } from './routes/startcall.js';
 import { CONNECTION_MESSAGES } from './constants.js';
 
 // ============================================================================
