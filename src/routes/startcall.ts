@@ -19,11 +19,13 @@ export async function startCallRoute(fastify: FastifyInstance) {
 
     const auth = Buffer.from(`${project}:${token}`).toString('base64');
 
-    // 1) SignalWire звонит СНАЧАЛА тебе (me).
-    // 2) Когда ты ответил, SignalWire возьмёт cXML с /incoming-call?to=...
     const conf = `c_${Date.now()}`;
-const url = `${baseUrl}/incoming-call?to=${encodeURIComponent(to)}&conf=${encodeURIComponent(conf)}`;
 
+    // 1) Звоним тебе
+    const urlMe = `${baseUrl}/incoming-call?conf=${encodeURIComponent(conf)}&role=caller`;
+
+    // 2) Когда ты ответил → /call-status запустит 2-й звонок на "to"
+    const statusCb = `${baseUrl}/call-status?conf=${encodeURIComponent(conf)}&to=${encodeURIComponent(to)}`;
 
     const r = await fetch(`https://${space}/api/laml/2010-04-01/Accounts/${project}/Calls.json`, {
       method: 'POST',
@@ -34,7 +36,10 @@ const url = `${baseUrl}/incoming-call?to=${encodeURIComponent(to)}&conf=${encode
       body: new URLSearchParams({
         To: me,
         From: from,
-        Url: url,
+        Url: urlMe,
+        StatusCallback: statusCb,
+        StatusCallbackEvent: 'answered',
+        StatusCallbackMethod: 'POST',
       }),
     });
 
