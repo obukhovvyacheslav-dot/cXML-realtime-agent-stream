@@ -21,7 +21,9 @@ export async function startCallRoute(fastify: FastifyInstance) {
 
     // 1) SignalWire звонит СНАЧАЛА тебе (me).
     // 2) Когда ты ответил, SignalWire возьмёт cXML с /incoming-call?to=...
-    const url = `${baseUrl}/incoming-call?to=${encodeURIComponent(to)}`;
+    const conf = `c_${Date.now()}`;
+const url = `${baseUrl}/incoming-call?to=${encodeURIComponent(to)}&conf=${encodeURIComponent(conf)}`;
+
 
     const r = await fetch(`https://${space}/api/laml/2010-04-01/Accounts/${project}/Calls.json`, {
       method: 'POST',
