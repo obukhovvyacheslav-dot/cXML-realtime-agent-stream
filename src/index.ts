@@ -23,6 +23,7 @@ import { streamingRoute } from './routes/streaming.js';
 import { healthRoute } from './routes/health.js';
 import { logger } from './utils/logger.js';
 import { startCallRoute } from './routes/startcall.js';
+import { joinRoute } from './routes/join.js';
 import { CONNECTION_MESSAGES } from './constants.js';
 
 // ============================================================================
@@ -59,6 +60,7 @@ async function createServer() {
   // Register all routes
   await fastify.register(healthRoute);
   await fastify.register(webhookRoute);
+  await fastify.register(joinRoute);
   await fastify.register(startCallRoute);
   await fastify.register(async (scopedFastify) => {
     await streamingRoute(scopedFastify, {
