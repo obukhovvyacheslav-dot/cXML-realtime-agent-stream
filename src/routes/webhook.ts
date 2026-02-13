@@ -8,23 +8,29 @@ export async function webhookRoute(fastify: FastifyInstance) {
     const protocol = request.headers['x-forwarded-proto'] === 'https' ? 'wss' : 'ws';
 
     const q = (request.query as any) || {};
-    const conf = (q.conf || '').toString();
-    const role = (q.role || 'caller').toString(); // caller | callee
+    const to = (q.to || '').toString(); // номер собеседника
+    if (!to || !to.startsWith('+')) {
+      return reply.code(400).type('text/plain').send('Missing ?to=+E164');
+    }
 
-    const websocketUrl = `${protocol}://${host}/media-stream?conf=${encodeURIComponent(conf)}&role=${encodeURIComponent(role)}`;
+    const websocketUrl = `${protocol}://${host}/media-stream`;
 
     const codec = AGENT_CONFIG.audioFormat === AUDIO_FORMAT.PCM16
       ? SIGNALWIRE_CODECS.PCM16
       : SIGNALWIRE_CODECS.G711_ULAW;
     const codecAttribute = codec ? ` codec="${codec}"` : '';
 
+    // ВАЖНО: Start/Stream НЕ блокирует, потом Dial соединяет звонок
     const cXMLResponse = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Connect>
+  <Say>Connecting.</Say>
+
+  <Start>
     <Stream url="${websocketUrl}"${codecAttribute} bidirectional="true" />
-  </Connect>
-  <Dial>
-    <Conference>${conf}</Conference>
+  </Start>
+
+  <Dial answerOnBridge="true">
+    <Number>${to}</Number>
   </Dial>
 </Response>`;
 
