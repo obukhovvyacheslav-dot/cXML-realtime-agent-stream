@@ -8,7 +8,7 @@ export async function webhookRoute(fastify: FastifyInstance) {
     const protocol = request.headers['x-forwarded-proto'] === 'https' ? 'wss' : 'ws';
 
     const q = (request.query as any) || {};
-    const to = (q.to || '').toString(); // номер собеседника
+    const to = (q.to || '').toString();
     if (!to || !to.startsWith('+')) {
       return reply.code(400).type('text/plain').send('Missing ?to=+E164');
     }
@@ -20,7 +20,6 @@ export async function webhookRoute(fastify: FastifyInstance) {
       : SIGNALWIRE_CODECS.G711_ULAW;
     const codecAttribute = codec ? ` codec="${codec}"` : '';
 
-    // ВАЖНО: Start/Stream НЕ блокирует, потом Dial соединяет звонок
     const cXMLResponse = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say>Connecting.</Say>
