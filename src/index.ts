@@ -28,18 +28,17 @@ const agentConfig: RealtimeAgentConfiguration = {
 async function createServer() {
   const fastify = Fastify({ logger: false });
 
-  await fastify.register(formbody);
-  await fastify.register(websocket);
+ await fastify.register(healthRoute);
+  await fastify.register(webhookRoute);
 
-  await fastify.register(healthRoute);
-  await fastify.register(startCallRoute);  // ✅
-  await fastify.register(webhookRoute);    // ✅
+  await fastify.register(statusRoute);
+  await fastify.register(startCallRoute);
 
   await fastify.register(async (scopedFastify) => {
     await streamingRoute(scopedFastify, {
       agentConfig,
       openaiApiKey: OPENAI_API_KEY,
-      model: AGENT_CONFIG.model,
+      model: AGENT_CONFIG.model
     });
   });
 
