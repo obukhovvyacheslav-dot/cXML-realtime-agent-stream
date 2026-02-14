@@ -10,7 +10,7 @@ export async function webhookRoute(fastify: FastifyInstance) {
 
     const q = (request.query as any) || {};
     const conf = (q.conf || '').toString();
-    const role = (q.role || '').toString(); // 'a' или 'b'
+    const role = (q.role || '').toString(); // 'a' | 'b'
 
     if (!conf || (role !== 'a' && role !== 'b')) {
       return reply.code(400).type('text/plain').send('Missing ?conf=...&role=a|b');
@@ -23,9 +23,7 @@ export async function webhookRoute(fastify: FastifyInstance) {
 
     const codecAttribute = codec ? ` codec="${codec}"` : '';
 
-    // ВАЖНО: никаких <Dial> / <Number> тут быть НЕ должно.
-    // Только стрим в наш WebSocket + параметры conf/role.
-    const cXMLResponse = `<?xml version="1.0" encoding="UTF-8"?>
+    const cXML = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
   <Say>${WEBHOOK_MESSAGES?.CONNECTING || 'Connecting.'}</Say>
   <Connect>
@@ -36,6 +34,6 @@ export async function webhookRoute(fastify: FastifyInstance) {
   </Connect>
 </Response>`;
 
-    reply.type('text/xml').send(cXMLResponse);
+    reply.type('text/xml').send(cXML);
   });
 }
