@@ -19,13 +19,8 @@ export async function startCallRoute(fastify: FastifyInstance) {
 
     const auth = Buffer.from(`${project}:${token}`).toString('base64');
 
-    const conf = `c_${Date.now()}`;
-
-    // 1) Звоним тебе
-    const urlMe = `${baseUrl}/incoming-call?conf=${encodeURIComponent(conf)}&role=caller`;
-
-    // 2) Когда ты ответил → /call-status запустит 2-й звонок на "to"
-    const statusCb = `${baseUrl}/call-status?conf=${encodeURIComponent(conf)}&to=${encodeURIComponent(to)}`;
+    // звонок СНАЧАЛА тебе, дальше cXML сам набирает to
+    const url = `${baseUrl}/incoming-call?to=${encodeURIComponent(to)}`;
 
     const r = await fetch(`https://${space}/api/laml/2010-04-01/Accounts/${project}/Calls.json`, {
       method: 'POST',
@@ -36,10 +31,7 @@ export async function startCallRoute(fastify: FastifyInstance) {
       body: new URLSearchParams({
         To: me,
         From: from,
-        Url: urlMe,
-        StatusCallback: statusCb,
-        StatusCallbackEvent: 'answered',
-        StatusCallbackMethod: 'POST',
+        Url: url,
       }),
     });
 
