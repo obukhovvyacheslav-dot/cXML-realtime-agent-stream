@@ -1,36 +1,39 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { AUDIO_FORMAT, SIGNALWIRE_CODECS } from '../constants.js';
+import { AUDIO_FORMAT, SIGNALWIRE_CODECS, WEBHOOK_MESSAGES } from '../constants.js';
 import { AGENT_CONFIG } from '../config.js';
 
 export async function webhookRoute(fastify: FastifyInstance) {
   fastify.all('/incoming-call', async (request: FastifyRequest, reply: FastifyReply) => {
     const host = request.headers.host || 'localhost';
-    const protocol = request.headers['x-forwarded-proto'] === 'https' ? 'wss' : 'ws';
+    const proto = request.headers['x-forwarded-proto'] === 'https' ? 'wss' : 'ws';
+    const websocketUrl = `${proto}://${host}/media-stream`;
 
     const q = (request.query as any) || {};
-    const to = (q.to || '').toString();
-    if (!to || !to.startsWith('+')) {
-      return reply.code(400).type('text/plain').send('Missing ?to=+E164');
+    const conf = (q.conf || '').toString();
+    const role = (q.role || '').toString(); // 'a' или 'b'
+
+    if (!conf || (role !== 'a' && role !== 'b')) {
+      return reply.code(400).type('text/plain').send('Missing ?conf=...&role=a|b');
     }
 
-    const websocketUrl = `${protocol}://${host}/media-stream`;
+    const codec =
+      AGENT_CONFIG.audioFormat === AUDIO_FORMAT.PCM16
+        ? SIGNALWIRE_CODECS.PCM16
+        : SIGNALWIRE_CODECS.G711_ULAW;
 
-    const codec = AGENT_CONFIG.audioFormat === AUDIO_FORMAT.PCM16
-      ? SIGNALWIRE_CODECS.PCM16
-      : SIGNALWIRE_CODECS.G711_ULAW;
     const codecAttribute = codec ? ` codec="${codec}"` : '';
 
+    // ВАЖНО: никаких <Dial> / <Number> тут быть НЕ должно.
+    // Только стрим в наш WebSocket + параметры conf/role.
     const cXMLResponse = `<?xml version="1.0" encoding="UTF-8"?>
 <Response>
-  <Say>Connecting.</Say>
-
-  <Start>
-    <Stream url="${websocketUrl}"${codecAttribute} bidirectional="true" />
-  </Start>
-
-  <Dial answerOnBridge="true">
-    <Number>${to}</Number>
-  </Dial>
+  <Say>${WEBHOOK_MESSAGES?.CONNECTING || 'Connecting.'}</Say>
+  <Connect>
+    <Stream url="${websocketUrl}"${codecAttribute}>
+      <Parameter name="conf" value="${conf}"/>
+      <Parameter name="role" value="${role}"/>
+    </Stream>
+  </Connect>
 </Response>`;
 
     reply.type('text/xml').send(cXMLResponse);
